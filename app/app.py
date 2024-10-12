@@ -1,13 +1,17 @@
 from litestar import Litestar, get
-from app.routes import home
 from typing import Any, Dict, TYPE_CHECKING
 import logging
 from litestar.datastructures import State
-
-from app.exceptions import http_exception_handler, validation_exception_handler
 from litestar.exceptions import HTTPException, ValidationException
+from litestar.config.cors import CORSConfig
+
+from app.routes import home
+from app.exceptions import http_exception_handler, validation_exception_handler
 
 logger = logging.getLogger()
+
+# TODO 使用 env 取得 domain
+cors_config = CORSConfig(allow_origins=["*"])
 
 
 @get("/", sync_to_thread=False)
@@ -36,10 +40,10 @@ async def after_exception_handler(exc: Exception, scope: "Scope") -> None:
     )
 
 
-app = Litestar(
-    [handler, home.routes],
-    exception_handlers={
-        ValidationException: validation_exception_handler,
-        HTTPException: http_exception_handler,
-    },
-    after_exception=[after_exception_handler])
+app = Litestar(route_handlers=[handler, home.routes],
+               cors_config=cors_config,
+               exception_handlers={
+                   ValidationException: validation_exception_handler,
+                   HTTPException: http_exception_handler,
+               },
+               after_exception=[after_exception_handler])
