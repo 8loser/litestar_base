@@ -7,11 +7,15 @@ Litestar 框架 API template
 pip install -r requirements.txt
 ```
 
+# 啟動服務
+
+`uvicorn app.app:app --reload` or `litestar run --reload`
+
 # TODO
- - [ ] install litestar
- - [ ] auto format
- - [ ] hot reload
- - [ ] swagger
+ - [x] install litestar
+ - [x] auto format
+ - [x] hot reload
+ - [x] swagger
  - [ ] router try/catch
  - [ ] unit test
  - [ ] 資料庫
