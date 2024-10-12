@@ -23,3 +23,4 @@ pip install -r requirements.txt
  - [ ] user subdoamain
  - [ ] cache
  - [ ] 防止爬蟲
+ - [ ] logger
