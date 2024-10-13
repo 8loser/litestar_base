@@ -47,10 +47,17 @@ async def after_exception_handler(exc: Exception, scope: "Scope") -> None:
     logger.info("%s - %s - %s", client_ip, type(exc).__name__, url)
 
 
-app = Litestar(route_handlers=[handler, home.routes],
-               cors_config=cors_config,
-               exception_handlers={
-                   ValidationException: validation_exception_handler,
-                   HTTPException: http_exception_handler,
-               },
-               after_exception=[after_exception_handler])
+def create_app() -> Litestar:
+    from app.config.envSetting import get_settings
+    settings = get_settings()
+    print(settings)
+    return Litestar(route_handlers=[handler, home.routes],
+                    cors_config=cors_config,
+                    exception_handlers={
+                        ValidationException: validation_exception_handler,
+                        HTTPException: http_exception_handler,
+                    },
+                    after_exception=[after_exception_handler])
+
+
+app = create_app()
