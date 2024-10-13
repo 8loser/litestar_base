@@ -12,12 +12,12 @@ pip install -r requirements.txt
 `uvicorn app.app:app --reload` or `litestar run --reload`
 
 # TODO
- - [x] install litestar
- - [x] auto format
- - [x] hot reload
- - [x] swagger
+ - [x] routes 設定
+ - [x] openAPI
+ - [x] .env 載入
+ - [x] CORS 設定
+ - [ ] 統一 response 架構
  - [ ] unit test
- - [ ] 資料庫
+ - [ ] 資料庫設定
  - [ ] 打包佈署
- - [ ] user subdoamain
  - [ ] 防止爬蟲
