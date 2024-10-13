@@ -1,11 +1,6 @@
 from litestar import Litestar, get
 from typing import Any, Dict, TYPE_CHECKING
 from litestar.datastructures import State
-from litestar.exceptions import HTTPException, ValidationException
-
-from app.routes import home
-from app.exceptions import http_exception_handler, validation_exception_handler
-from app.config import app as config
 
 # 透過在型別檢查時才導入，減少程式的啟動時間或資源使用
 if TYPE_CHECKING:
@@ -44,6 +39,11 @@ async def after_exception_handler(exc: Exception, scope: "Scope") -> None:
 
 
 def create_app() -> Litestar:
+    from app.routes import home
+    from app.exceptions import http_exception_handler, validation_exception_handler
+    from app.config import app as config
+    from litestar.exceptions import HTTPException, ValidationException
+
     return Litestar(route_handlers=[handler, home.routes],
                     cors_config=config.cors,
                     compression_config=config.compression,
