@@ -1,20 +1,15 @@
 from litestar import Litestar, get
 from typing import Any, Dict, TYPE_CHECKING
-import logging
 from litestar.datastructures import State
 from litestar.exceptions import HTTPException, ValidationException
-from litestar.config.cors import CORSConfig
+
 from app.routes import home
 from app.exceptions import http_exception_handler, validation_exception_handler
+from app.config import app as config
 
 # 透過在型別檢查時才導入，減少程式的啟動時間或資源使用
 if TYPE_CHECKING:
     from litestar.types import Scope
-
-logger = logging.getLogger()
-
-# TODO 使用 env 取得 domain
-cors_config = CORSConfig(allow_origins=["*"])
 
 
 @get("/", sync_to_thread=False)
@@ -44,15 +39,14 @@ async def after_exception_handler(exc: Exception, scope: "Scope") -> None:
     else:
         url = f"{scheme}://{host}:{port}{path}"
 
-    logger.info("%s - %s - %s", client_ip, type(exc).__name__, url)
+    from litestar.cli._utils import console
+    console.print(f"[yellow]{client_ip} - {type(exc).__name__} - {url}[/]")
 
 
 def create_app() -> Litestar:
-    from app.config.envSetting import get_settings
-    settings = get_settings()
-    print(settings)
     return Litestar(route_handlers=[handler, home.routes],
-                    cors_config=cors_config,
+                    cors_config=config.cors,
+                    compression_config=config.compression,
                     exception_handlers={
                         ValidationException: validation_exception_handler,
                         HTTPException: http_exception_handler,
