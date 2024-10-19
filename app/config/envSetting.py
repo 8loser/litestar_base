@@ -6,12 +6,13 @@ from dataclasses import dataclass, field
 
 @dataclass
 class AppSettings:
-    MODE: str = field(default_factory=lambda: os.getenv("MODE", "development"))
+    NAME: str = field(default_factory=lambda: os.getenv("NAME", "localhost"))
     # TODO APP_PORT 加上應用
     APP_PORT: int = field(
         default_factory=lambda: int(os.getenv("APP_PORT", "3000")))
     ALLOWED_CORS_ORIGINS: list[str] | str = field(
         default_factory=lambda: os.getenv("ALLOWED_CORS_ORIGINS", '["*"]'))
+    VERSION: str = "0.0.1"
 
 
 @dataclass
@@ -20,6 +21,7 @@ class Settings:
 
     @classmethod
     def from_env(cls, dotenv_filename: str = ".env") -> 'Settings':
+        '''從 .env 載入設定'''
         env_file = Path(f"{os.curdir}/{dotenv_filename}")
 
         if env_file.is_file():
