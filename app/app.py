@@ -39,15 +39,15 @@ async def after_exception_handler(exc: Exception, scope: "Scope") -> None:
 
 
 def create_app() -> Litestar:
-    from app.routes import demo
+    from app.routers import route_handlers
     from app.exceptions import http_exception_handler, validation_exception_handler
     from app.config import app as config
     from litestar.exceptions import HTTPException, ValidationException
 
-    return Litestar(route_handlers=[handler, demo.routes],
-                    cors_config=config.cors,
+    return Litestar(cors_config=config.cors,
                     openapi_config=config.openAPI,
                     compression_config=config.compression,
+                    route_handlers=route_handlers,
                     exception_handlers={
                         ValidationException: validation_exception_handler,
                         HTTPException: http_exception_handler,
